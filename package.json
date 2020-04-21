@@ -6,7 +6,7 @@
   "author": "lxnxbnq <yuanddmail@163.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack --mode development",
+    "dev": "webpack-dev-server --color --mode development",
     "build": "webpack --mode production"
   },
   "dependencies": {
@@ -24,10 +24,19 @@
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.5.2",
+    "cssnano": "^4.1.10",
+    "extract-css-chunks-webpack-plugin": "^4.7.4",
     "html-webpack-plugin": "^4.2.0",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
     "style-loader": "^1.1.4",
+    "url-loader": "^4.1.0",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "browserslist": [
     "> 1%",
