@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react",
+    "baseUrl":".",
+    "paths": {
+        "@src/*": ["./src/*"], // 解决ts打包过程中的映射
+    },
+  },
+  "include": [
+    "src"
+  ],
+  "rules": {
+    "no-implicit-dependencies": ["optional", ["src"]] // 该条默认项为禁止导入未在package.json中列出的依赖，解决ts编译过程中的映射
+  }
+}

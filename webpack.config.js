@@ -3,6 +3,10 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
+// `CheckerPlugin` is optional. Use it if you want async error reporting.
+// We need this plugin to detect a `--watch` mode. It may be removed later
+// after https://github.com/webpack/webpack/issues/3460 will be resolved.
+const { CheckerPlugin } = require('awesome-typescript-loader')
 const proxy = require('./src/config/apiConfig');
 
 
@@ -39,6 +43,7 @@ const getStyleLoaders = (cssOptions) => {
 
 // 通用
 const COMMON_PLUGIN = [
+    new CheckerPlugin(),
     // 生成html页面
     new HtmlWebpackPlugin({
         // 打包输出HTML
@@ -78,7 +83,7 @@ const getPlugins = () => {
 
 module.exports = {
     entry: {
-        main: './src/index.jsx',
+        main: './src/index.tsx',
     },
     // production mode(生产模式) 可以开箱即用地进行各种优化。 包括压缩，作用域提升，tree-shaking 等。
     output: {
@@ -106,12 +111,24 @@ module.exports = {
             }
         }
     },
+    resolve: {
+        // Currently we need to add '.ts' to the resolve.extensions array.
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        // 设置别名
+        alias: {
+            "@src": path.resolve(__dirname, 'src')
+        }
+    },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader'
+            },
+            {
+              test: /\.tsx?$/,
+              loader: 'awesome-typescript-loader'
             },
             {
                 test: /\.(png|jpe?g|gif|pdf)/,
@@ -158,11 +175,5 @@ module.exports = {
         port: 3000,
         proxy: proxy,
         hot: true, // 热重载
-    },
-    resolve: {
-        // 设置别名
-        alias: {
-            "@src": path.resolve(__dirname, 'src')
-        }
     }
 }
