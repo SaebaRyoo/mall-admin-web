@@ -36,7 +36,7 @@ const getStyleLoaders = (cssOptions) => {
                 ]
             }
         },
-        { loader: "less-loader" } // compiles Less to CSS 
+        { loader: "less-loader", options: { javascriptEnabled: true } } // compiles Less to CSS 
     ]
     return loaders;
 };
@@ -143,9 +143,18 @@ module.exports = {
                 ],
             },
             {
+                // ant-design css
+                test: /\.css$/,
+                include: [path.resolve(__dirname, 'node_modules/antd/dist')],
+                use: getStyleLoaders({
+                    sourceMap: devMode,
+                    modules: false
+                }).slice(0,2)
+            },
+            {
                 // global less
                 test: /^(.*\.global).*\.less$/,
-                exclude:[path.resolve(__dirname, 'node_modules')],
+                // exclude:[path.resolve(__dirname, 'node_modules')],
                 use: getStyleLoaders({
                     sourceMap: devMode,
                     modules: false,
@@ -155,7 +164,7 @@ module.exports = {
             {
                 //less module
                 test: /^(?!.*\.global).*\.less$/,
-                exclude:[path.resolve(__dirname, 'node_modules')],
+                // exclude:[path.resolve(__dirname, 'node_modules')],
                 use: getStyleLoaders({
                     sourceMap: devMode,
                     modules: {
