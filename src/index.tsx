@@ -4,11 +4,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import s from './index.less';
-
-sum(1, 2);
+import '@src/assets/normalize.global.less';
 
 class App extends React.Component {
   render() {
+    sum(1, 2);
     return (
       <div>
         <div className={s.color}>test</div>
