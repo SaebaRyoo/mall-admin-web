@@ -8,16 +8,16 @@ import ProductCatePage from '@src/pages/pms/productCate';
 import ProductAttrPage from '@src/pages/pms/productAttr';
 import BrandManagePage from '@src/pages/pms/brand';
 
-export interface Route {
+export interface I_Route {
   component?: React.ReactElement | React.FC | React.ReactNode;
   path: string;
   exact?: boolean;
-  routes?: Route[];
+  routes?: I_Route[];
   redirect?: string;
   name?: string;
 }
 
-export const layoutRotutes: Route[] = [
+export const layoutRotutes: I_Route[] = [
   {
     path: '/layout/home',
     component: Home,
@@ -57,7 +57,7 @@ export const layoutRotutes: Route[] = [
   },
 ];
 
-export const routes: Route[] = [
+export const routes: I_Route[] = [
   {
     path: '/',
     redirect: '/login',
