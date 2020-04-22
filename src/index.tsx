@@ -9,7 +9,6 @@ sum(1, 2);
 
 class App extends React.Component {
   render() {
-    console.log(1);
     return (
       <div>
         <div className={s.color}>test</div>
