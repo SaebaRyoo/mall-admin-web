@@ -13,7 +13,7 @@ const tailLayout = {
 
 const LoginPage = () => {
   let history = useHistory();
-  const onFinish = (values: any) => {
+  const onFinish = () => {
     history.push('/layout/home');
   };
 

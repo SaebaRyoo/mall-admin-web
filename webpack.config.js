@@ -83,7 +83,7 @@ const getPlugins = () => {
 
 module.exports = {
     entry: {
-        main: './src/index.tsx',
+        main: './src/index.tsx'
     },
     // production mode(生产模式) 可以开箱即用地进行各种优化。 包括压缩，作用域提升，tree-shaking 等。
     output: {
@@ -94,21 +94,51 @@ module.exports = {
     },
     optimization: {
         // 将node_modules中的包和项目代码分割
+        // https://webpack.js.org/plugins/split-chunks-plugin/
         splitChunks: {
-            // 默认为async(异步分割)
-            // 同步、异步都打包
-            chunks: 'all',
-            cacheGroups: {
-                lodash: {
-                  name: 'chunk-lodash', // 单独将 lodash 拆包
-                  priority: 10, // 优先级要大于 verdors 不然会被打包进 verdors
-                  test: /[\\/]node_modules[\\/]lodash[\\/]/
-                },
-                // webpack4的默认配置是通过test: /[\\/]node_modules[\\/]/分割通过node_modules导入的模块
-                vendors: {
-                    name: 'vendors'
-                },
+          // 默认为async(异步分割), all(同步、异步都打包)
+          chunks: 'all',
+          minSize: 30000,
+          maxSize: 0,
+          minChunks: 1,
+          maxAsyncRequests: 6,
+          maxInitialRequests: 4,
+          automaticNameDelimiter: '~',
+          cacheGroups: {
+            // 单独打包的第三方库的优先级一定要大于匹配 /[\\/]node_modules[\\/]/ 的common-chunks, 不然会被打包进去。
+            "lodash-chunk": {
+                // When files paths are processed by webpack, they always contain / on Unix systems and \ on Windows. 
+                // That's why using [\\/] in {cacheGroup}.test fields is necessary to represent a path separator. 
+                // / or \ in {cacheGroup}.test will cause issues when used cross-platform.
+                test: /[\\/]node_modules[\\/]lodash[\\/]/,
+                name: 'lodash-chunk', // 单独将 lodash 拆包
+                priority: 10,
+            },
+            "react-chunks": {
+                test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-is|react-redux|redux|react-router-dom)[\\/]/,
+                name: 'react-chunks', // 单独将 react 相关拆包
+                // chunks: 'all',
+                priority: 10,
+            },
+            "antd-chunk": {
+                test: /[\\/]node_modules[\\/](antd)[\\/]/,
+                name: 'antd-chunk', // 单独将 antd 拆包
+                // chunks: 'all',
+                priority: 10,
+            },
+            // 将node_modules中剩余的第三方库一起打包
+            "common-chunks": {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'common-chunks',
+              priority: -10,
+            },
+            // 默认行为
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true // 如果当前块已从主模块拆分出来，则将重用它而不是生成新的块	
             }
+          }
         }
     },
     resolve: {

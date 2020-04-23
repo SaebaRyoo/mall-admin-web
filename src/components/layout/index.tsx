@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { UserOutlined, LaptopOutlined } from '@ant-design/icons';
 import { layoutRotutes, I_Route } from '@src/core/routes';
@@ -7,10 +7,6 @@ import s from './index.less';
 
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
-
-const breadMap: any = {
-  pms: '商品',
-};
 
 const MenuComponent = (routes: any[], handleClick: any) => {
   return routes.map((route) => {
@@ -32,7 +28,8 @@ const MenuComponent = (routes: any[], handleClick: any) => {
     return (
       <Menu.Item key={route.path} onClick={() => handleClick(route)}>
         <LaptopOutlined />
-        {route.name}
+        {typeof route.name === 'string' &&
+          route.name.split('/')[route.name.split('/').length - 1]}
       </Menu.Item>
     );
   });
@@ -44,8 +41,7 @@ const LayoutComponent = (props: { children: React.ReactNode }) => {
 
   const handleClick = (route: I_Route) => {
     history.push(route.path);
-    let key = location.pathname.split('/')[2];
-    setBread([breadMap[key], route.name]);
+    setBread(typeof route.name === 'string' && route.name.split('/'));
   };
 
   const BreadCrumbItem = useMemo(() => {
@@ -60,7 +56,7 @@ const LayoutComponent = (props: { children: React.ReactNode }) => {
 
   return (
     <Layout className={s.layout}>
-      <Sider width={200} className={s['site-layout-background']}>
+      <Sider width={200} className={s.sider}>
         <Menu
           mode="inline"
           defaultSelectedKeys={['1']}
