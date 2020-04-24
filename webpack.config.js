@@ -70,8 +70,8 @@ const COMMON_PLUGIN = [
     new ExtractCssChunks({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: devMode ? 'static/css/[name].css' : 'static/css/[name].[contenthash:8].css',
-        chunkFilename: devMode ? 'static/css/[id].css' : 'static/css/[id].[contenthash:8].css',
+        filename: devMode ? 'static/css/[name].css' : 'static/css/[name].[hash:8].css',
+        chunkFilename: devMode ? 'static/css/[name].css' : 'static/css/[name].[contenthash:8].css',
     })
 ]
 
@@ -97,7 +97,7 @@ module.exports = {
     // production mode(生产模式) 可以开箱即用地进行各种优化。 包括压缩，作用域提升，tree-shaking 等。
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: devMode ? 'static/js/bundle.js' : 'static/js/[name].[contenthash:8].bundle.js',
+        filename: devMode ? 'static/js/bundle.js' : 'static/js/[name].[hash:8].bundle.js',
         chunkFilename:devMode ? 'static/js/bundle.js' : 'static/js/[name].[contenthash:8].chunk.js',
         publicPath: '/'
     },
@@ -221,7 +221,7 @@ module.exports = {
                 use: 'babel-loader'
             },
             {
-              test: /\.tsx?$/,
+              test: /\.(tsx|ts)?$/,
               loader: 'awesome-typescript-loader'
             },
             {
