@@ -1,8 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const isWsl = require('is-wsl');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const safePostCssParser = require('postcss-safe-parser');
+const TerserPlugin = require('terser-webpack-plugin');
 // `CheckerPlugin` is optional. Use it if you want async error reporting.
 // We need this plugin to detect a `--watch` mode. It may be removed later
 // after https://github.com/webpack/webpack/issues/3460 will be resolved.
@@ -11,6 +15,11 @@ const proxy = require('./src/config/apiConfig');
 
 
 const devMode = process.env.NODE_ENV === 'development';
+// const prodMode = process.env.NODE_ENV === 'production';
+// Variable used for enabling profiling in Production
+// passed into alias object. Uses a flag if passed into the build command
+const isEnvProductionProfile =
+    devMode && process.argv.includes('--profile');
 
 const getStyleLoaders = (cssOptions) => {
     const loaders = [
@@ -61,8 +70,8 @@ const COMMON_PLUGIN = [
     new ExtractCssChunks({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: devMode ? 'styles/[name].css' : 'styles/[name].[hash].css',
-        chunkFilename: devMode ? 'styles/[id].css' : 'styles/[id].[hash].css',
+        filename: devMode ? 'static/css/[name].css' : 'static/css/[name].[contenthash:8].css',
+        chunkFilename: devMode ? 'static/css/[id].css' : 'static/css/[id].[contenthash:8].css',
     })
 ]
 
@@ -88,11 +97,62 @@ module.exports = {
     // production mode(生产模式) 可以开箱即用地进行各种优化。 包括压缩，作用域提升，tree-shaking 等。
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[hash:16].bundle.js',
-        chunkFilename: '[name].[hash:16].js',
+        filename: devMode ? 'static/js/bundle.js' : 'static/js/[name].[contenthash:8].bundle.js',
+        chunkFilename:devMode ? 'static/js/bundle.js' : 'static/js/[name].[contenthash:8].chunk.js',
         publicPath: '/'
     },
     optimization: {
+        minimizer: [
+          // This is only used in production mode
+          new TerserPlugin({
+            terserOptions: {
+              parse: {
+                ecma: 8,
+              },
+              compress: {
+                ecma: 5,
+                warnings: false,
+                comparisons: false,
+                inline: 2,
+              },
+              mangle: {
+                safari10: true,
+              },
+              // Added for profiling in devtools
+              keep_classnames: isEnvProductionProfile,
+              keep_fnames: isEnvProductionProfile,
+              output: {
+                ecma: 5,
+                comments: false,
+                ascii_only: true,
+              },
+            },
+            // Use multi-process parallel running to improve the build speed
+            // Default number of concurrent runs: os.cpus().length - 1
+            // Disabled on WSL (Windows Subsystem for Linux) due to an issue with Terser
+            // https://github.com/webpack-contrib/terser-webpack-plugin/issues/21
+            parallel: !isWsl,
+            // Enable file caching
+            cache: true,
+            sourceMap: devMode,
+          }),
+          // This is only used in production mode
+          new OptimizeCSSAssetsPlugin({
+            cssProcessorOptions: {
+              parser: safePostCssParser,
+              map: devMode
+                ? {
+                    // `inline: false` forces the sourcemap to be output into a
+                    // separate file
+                    inline: false,
+                    // `annotation: true` appends the sourceMappingURL to the end of
+                    // the css file, helping the browser find the sourcemap
+                    annotation: true,
+                  }
+                : false,
+            },
+          }),
+        ],
         // 将node_modules中的包和项目代码分割
         // https://webpack.js.org/plugins/split-chunks-plugin/
         splitChunks: {
@@ -139,7 +199,11 @@ module.exports = {
               reuseExistingChunk: true // 如果当前块已从主模块拆分出来，则将重用它而不是生成新的块	
             }
           }
-        }
+        },
+        // splitChunks: {
+        //     chunks: 'all',
+        //     name: false,
+        // },
     },
     resolve: {
         // Currently we need to add '.ts' to the resolve.extensions array.
@@ -167,7 +231,7 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: 2048,
-                            name: 'images/[name].[hash:8].[ext]' // 配置自定义文件名模板
+                            name: 'static/images/[name].[hash:8].[ext]' // 配置自定义文件名模板
                         },
                     },
                 ],
