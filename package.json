@@ -6,8 +6,8 @@
   "author": "lxnxbnq <yuanddmail@163.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --color --mode development",
-    "build": "webpack --mode production",
+    "dev": "webpack-dev-server -r @babel/register --color --mode development",
+    "build": "webpack -r @babel/register --mode production",
     "prettier": "prettier --write ./src/**/*.tsx ./src/**/*.ts --config ./.prettierrc.js",
     "lint:check": "eslint ./src --ext .tsx,.ts --report-unused-disable-directives --fix",
     "lint": "yarn prettier && yarn lint:check"
@@ -17,6 +17,7 @@
     "@babel/runtime": "^7.9.2",
     "@types/react-redux": "^7.1.7",
     "antd": "^4.1.4",
+    "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "core-js": "3",
     "lodash": "^4.17.15",
@@ -31,6 +32,7 @@
     "@babel/core": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0",
     "@types/lodash": "^4.14.150",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",

@@ -1,17 +1,18 @@
-const path = require('path');
-const webpack = require('webpack');
-const isWsl = require('is-wsl');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const safePostCssParser = require('postcss-safe-parser');
-const TerserPlugin = require('terser-webpack-plugin');
+// 在cli中配置 -r @babel/register 支持在node中使用es6的import/export模块
+import webpack from 'webpack';
+import path from 'path';
+import isWsl from 'is-wsl';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import safePostCssParser from 'postcss-safe-parser';
+import TerserPlugin from 'terser-webpack-plugin';
 // `CheckerPlugin` is optional. Use it if you want async error reporting.
 // We need this plugin to detect a `--watch` mode. It may be removed later
 // after https://github.com/webpack/webpack/issues/3460 will be resolved.
-const { CheckerPlugin } = require('awesome-typescript-loader')
-const proxy = require('./src/config/apiConfig');
+import { CheckerPlugin } from 'awesome-typescript-loader';
+import proxy from './src/config/apiConfig';
 
 
 const devMode = process.env.NODE_ENV === 'development';
@@ -272,7 +273,7 @@ module.exports = {
     plugins: getPlugins(),
 
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
+        contentBase: path.join(__dirname, 'dev'),
         compress: true,
         historyApiFallback: true, // 当使用 HTML5 History API 时,任意的 404 响应都可能需要被替代为 index.html
         port: 3000,
