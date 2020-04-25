@@ -1,3 +1,4 @@
+// const path = require('path');
 module.exports = {
     env: {
       browser: true,
@@ -16,6 +17,7 @@ module.exports = {
     },
     parser: '@typescript-eslint/parser',
     parserOptions: {
+      // project: path.resolve(__dirname, './tsconfig.json'),
       ecmaFeatures: {
         jsx: true,
         experimentalObjectRestSpread: true
@@ -31,7 +33,8 @@ module.exports = {
       'default-case': 1,
       'no-alert': 2,
       'react/jsx-uses-react': 'error',
-      'react/jsx-uses-vars': 'error',
+			'react/jsx-uses-vars': 'error',
+			'react/display-name': "off", // 关闭该规则，在使用匿名箭头函数返回一个组件时，Eslint会认为正在定义一个新组件而未为其设置任何名称。或者使用function xx(){} 声明一个函数
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "warn"
     },
@@ -59,4 +62,3 @@ module.exports = {
     //   ]
     // }
   };
-  

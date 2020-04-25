@@ -8,12 +8,13 @@ import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import safePostCssParser from 'postcss-safe-parser';
 import TerserPlugin from 'terser-webpack-plugin';
-// `CheckerPlugin` is optional. Use it if you want async error reporting.
-// We need this plugin to detect a `--watch` mode. It may be removed later
-// after https://github.com/webpack/webpack/issues/3460 will be resolved.
-import { CheckerPlugin } from 'awesome-typescript-loader';
+import SpeedMeasurePlugin from "speed-measure-webpack-plugin"
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+
+// import { CheckerPlugin } from 'awesome-typescript-loader';
 import proxy from './src/config/apiConfig';
 
+const smp = new SpeedMeasurePlugin();
 
 const devMode = process.env.NODE_ENV === 'development';
 // const prodMode = process.env.NODE_ENV === 'production';
@@ -46,14 +47,17 @@ const getStyleLoaders = (cssOptions) => {
                 ]
             }
         },
-        { loader: "less-loader", options: { javascriptEnabled: true } } // compiles Less to CSS 
+        { loader: "less-loader", options: { javascriptEnabled: true } } // compiles Less to CSS
     ]
     return loaders;
 };
 
 // 通用
 const COMMON_PLUGIN = [
-    new CheckerPlugin(),
+		// 在单独的进程上运行ts类型检查器
+    new ForkTsCheckerWebpackPlugin({
+				reportFiles: ['src/**/*.{ts,tsx}', '!src/skip.ts']
+		}),
     // 生成html页面
     new HtmlWebpackPlugin({
         // 打包输出HTML
@@ -91,7 +95,7 @@ const getPlugins = () => {
     return devMode ? COMMON_PLUGIN.concat(DEV_PLUGIN) : COMMON_PLUGIN.concat(PROD_PLUGIN);
 }
 
-module.exports = {
+module.exports = smp.wrap({
     entry: {
         main: './src/index.tsx'
     },
@@ -168,8 +172,8 @@ module.exports = {
           cacheGroups: {
             // 单独打包的第三方库的优先级一定要大于匹配 /[\\/]node_modules[\\/]/ 的common-chunks, 不然会被打包进去。
             "lodash-chunk": {
-                // When files paths are processed by webpack, they always contain / on Unix systems and \ on Windows. 
-                // That's why using [\\/] in {cacheGroup}.test fields is necessary to represent a path separator. 
+                // When files paths are processed by webpack, they always contain / on Unix systems and \ on Windows.
+                // That's why using [\\/] in {cacheGroup}.test fields is necessary to represent a path separator.
                 // / or \ in {cacheGroup}.test will cause issues when used cross-platform.
                 test: /[\\/]node_modules[\\/]lodash[\\/]/,
                 name: 'lodash-chunk', // 单独将 lodash 拆包
@@ -197,7 +201,7 @@ module.exports = {
             default: {
               minChunks: 2,
               priority: -20,
-              reuseExistingChunk: true // 如果当前块已从主模块拆分出来，则将重用它而不是生成新的块	
+              reuseExistingChunk: true // 如果当前块已从主模块拆分出来，则将重用它而不是生成新的块
             }
           }
         },
@@ -214,6 +218,7 @@ module.exports = {
             "@src": path.resolve(__dirname, 'src')
         }
     },
+    context: __dirname, // to automatically find tsconfig.json
     module: {
         rules: [
             {
@@ -222,8 +227,14 @@ module.exports = {
                 use: 'babel-loader'
             },
             {
-              test: /\.(tsx|ts)?$/,
-              loader: 'awesome-typescript-loader'
+              test: /\.tsx?$/,
+            // awesome-typescript-loader 编译ts的速度比ts-loader + fork-ts-checker-webpack-plugin 要慢大约至少3秒+，依据项目体积增加时间
+            // loader: 'awesome-typescript-loader',
+              loader: 'ts-loader',
+              options: {
+                // disable type checker - we will use it in fork plugin
+                transpileOnly: true
+              }
             },
             {
                 test: /\.(png|jpe?g|gif|pdf)/,
@@ -272,6 +283,7 @@ module.exports = {
     },
     plugins: getPlugins(),
 
+
     devServer: {
         contentBase: path.join(__dirname, 'dev'),
         compress: true,
@@ -280,4 +292,4 @@ module.exports = {
         proxy: proxy,
         hot: true, // 热重载
     }
-}
+})
