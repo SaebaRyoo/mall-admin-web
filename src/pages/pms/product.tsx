@@ -1,6 +1,6 @@
 import * as React from 'react';
 import request from '@src/core/request';
-import Search, { FieldType } from '@src/components/Search';
+import FieldsSearch, { FieldType } from '@src/components/Search';
 import ProductTable from './components/productTable';
 
 const fieldsConfig: FieldType[] = [
@@ -90,9 +90,53 @@ const fieldsConfig: FieldType[] = [
 		},
 	},
 ];
+
+const dataSource = [
+	{
+		id: '1',
+		productImg: '图片',
+		productName: '小米',
+		attr: {
+			price: '3799',
+			number: 6946605,
+		},
+		tag: {
+			up: true,
+			new: true,
+			recommend: true,
+		},
+		sort: 100,
+		stock: 100,
+		audit: '审核',
+		sales: 100,
+	},
+	{
+		id: '2',
+		productImg: '图片',
+		productName: '小米',
+		attr: {
+			price: '3799',
+			number: 6946605,
+		},
+		tag: {
+			up: true,
+			new: true,
+			recommend: true,
+		},
+		sort: 100,
+		stock: 100,
+		audit: '审核',
+		sales: 100,
+	},
+];
+interface Login {
+	username: string;
+	token: string;
+	role: string;
+}
 const ProductListPage = () => {
 	const onSearch = async () => {
-		const data = await request('/login', {
+		const data = await request<Login>('/login', {
 			method: 'POST',
 			params: {
 				username: 'william',
@@ -108,8 +152,8 @@ const ProductListPage = () => {
 
 	return (
 		<div>
-			<Search data={fieldsConfig} onSearch={onSearch} />
-			<ProductTable />
+			<FieldsSearch data={fieldsConfig} onSearch={onSearch} />
+			<ProductTable dataSource={dataSource} />
 		</div>
 	);
 };

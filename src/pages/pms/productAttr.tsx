@@ -1,7 +1,12 @@
 import * as React from 'react';
+import AttrTable from './components/attrTable';
 
 const ProductAttrPage = () => {
-  return <div>商品类型</div>;
+	return (
+		<div>
+			<AttrTable />
+		</div>
+	);
 };
 
 export default ProductAttrPage;

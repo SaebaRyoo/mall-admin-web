@@ -260,7 +260,7 @@ module.exports = smp.wrap({
             {
                 // global less
                 test: /^(.*\.global).*\.less$/,
-                // exclude:[path.resolve(__dirname, 'node_modules')],
+                exclude:[path.resolve(__dirname, 'node_modules')],
                 use: getStyleLoaders({
                     sourceMap: devMode,
                     modules: false,
@@ -270,7 +270,7 @@ module.exports = smp.wrap({
             {
                 //less module
                 test: /^(?!.*\.global).*\.less$/,
-                // exclude:[path.resolve(__dirname, 'node_modules')],
+                exclude:[path.resolve(__dirname, 'node_modules')],
                 use: getStyleLoaders({
                     sourceMap: devMode,
                     modules: {
@@ -288,7 +288,7 @@ module.exports = smp.wrap({
         contentBase: path.join(__dirname, 'dev'),
         compress: true,
         historyApiFallback: true, // 当使用 HTML5 History API 时,任意的 404 响应都可能需要被替代为 index.html
-        port: 3000,
+        port: 3002,
         proxy: proxy,
         hot: true, // 热重载
     }
