@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Steps, Button, message, Form } from 'antd';
 import s from './addProduct.less';
 import StepOne from './components/steps/step1';
+import StepTwo from './components/steps/step2';
 
 const { Step } = Steps;
 
@@ -12,7 +13,7 @@ const steps = [
 	},
 	{
 		title: '填写商品促销',
-		content: '商品促销',
+		content: <StepTwo />,
 	},
 	{
 		title: '填写商品属性',
@@ -25,8 +26,8 @@ const steps = [
 ];
 
 const layout = {
-	labelCol: { span: 3 },
-	wrapperCol: { span: 21 },
+	labelCol: { span: 6 },
+	wrapperCol: { span: 18 },
 };
 const AddProductPage = () => {
 	const [current, changeCurrent] = React.useState<number>(0);

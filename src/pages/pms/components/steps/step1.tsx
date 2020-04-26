@@ -5,7 +5,7 @@ const Option = Select.Option;
 const TextArea = Input.TextArea;
 
 const tailLayout = {
-	wrapperCol: { offset: 0, span: 8 },
+	wrapperCol: { offset: 0, span: 14 },
 };
 const StepOne = () => {
 	return (
