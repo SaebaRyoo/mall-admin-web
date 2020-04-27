@@ -99,6 +99,7 @@ module.exports = smp.wrap({
     entry: {
         main: './src/index.tsx'
     },
+    devtool: devMode ? 'eval-source-map' : 'eval-cheap-source-map',
     // production mode(生产模式) 可以开箱即用地进行各种优化。 包括压缩，作用域提升，tree-shaking 等。
     output: {
         path: path.resolve(__dirname, 'dist'),

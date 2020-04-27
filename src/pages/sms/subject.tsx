@@ -1,7 +1,47 @@
+// 专题
 import * as React from 'react';
+import SubjectTable from './components/subjectTable';
+import FieldsSearch, { FieldType } from '@src/components/Search';
+
+const fieldsConfig: FieldType[] = [
+	{
+		type: 'input',
+		label: '专题名称',
+		name: 'name',
+		props: {
+			placeholder: '专题名称',
+		},
+	},
+	{
+		type: 'select',
+		label: '推荐状态',
+		name: 'status',
+		options: [
+			{
+				id: 1,
+				value: '1',
+				name: '未推荐',
+			},
+			{
+				id: 2,
+				value: '2',
+				name: '推荐中',
+			},
+		],
+		props: {
+			placeholder: '全部',
+		},
+	},
+];
 
 const SubjectPage = () => {
-  return <div>专题推荐</div>;
+	const onSearch = () => {};
+	return (
+		<div>
+			<FieldsSearch data={fieldsConfig} onSearch={onSearch} />
+			<SubjectTable />
+		</div>
+	);
 };
 
 export default SubjectPage;

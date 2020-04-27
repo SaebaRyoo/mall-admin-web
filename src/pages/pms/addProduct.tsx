@@ -39,6 +39,9 @@ const AddProductPage = () => {
 	const prev = () => {
 		changeCurrent(current - 1);
 	};
+	const onFinish = (values: any) => {
+		console.log(values);
+	};
 	return (
 		<div className={s.container}>
 			<Steps current={current}>
@@ -46,31 +49,26 @@ const AddProductPage = () => {
 					<Step key={item.title} title={item.title} />
 				))}
 			</Steps>
-			<div className={s['steps-content']}>
-				<Form {...layout} form={form}>
-					{steps[current].content}
-				</Form>
-			</div>
-			<div className={s['steps-action']}>
-				{current > 0 && (
-					<Button className="margin8" onClick={() => prev()}>
-						上一步
-					</Button>
-				)}
-				{current < steps.length - 1 && (
-					<Button type="primary" onClick={() => next()}>
-						下一步
-					</Button>
-				)}
-				{current === steps.length - 1 && (
-					<Button
-						type="primary"
-						onClick={() => message.success('Processing complete!')}
-					>
-						完成
-					</Button>
-				)}
-			</div>
+			<Form form={form} name="test" onFinish={onFinish} {...layout}>
+				<div className={s['steps-content']}>{steps[current].content}</div>
+				<div className={s['steps-action']}>
+					{current > 0 && (
+						<Button className="margin8" onClick={() => prev()}>
+							上一步
+						</Button>
+					)}
+					{current < steps.length - 1 && (
+						<Button type="primary" onClick={() => next()}>
+							下一步
+						</Button>
+					)}
+					{current === steps.length - 1 && (
+						<Button type="primary" htmlType="submit">
+							完成
+						</Button>
+					)}
+				</div>
+			</Form>
 		</div>
 	);
 };

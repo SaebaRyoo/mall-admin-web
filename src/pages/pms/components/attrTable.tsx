@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table, Button } from 'antd';
-import s from './common.less';
 const dataSource = [
 	{
 		key: '1',
@@ -44,7 +43,7 @@ const columns = [
 		dataIndex: 'setting',
 		key: 'setting',
 		render: () => (
-			<div className={s.action}>
+			<div className="g_action">
 				<Button>属性列表</Button>
 				<Button>参数列表</Button>
 			</div>
@@ -55,7 +54,7 @@ const columns = [
 		dataIndex: 'action',
 		key: 'action',
 		render: () => (
-			<div className={s.action}>
+			<div className="g_action">
 				<Button>编辑</Button>
 				<Button type="danger">删除</Button>
 			</div>
