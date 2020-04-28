@@ -2,6 +2,8 @@ import * as React from 'react';
 import request from '@src/core/request';
 import FieldsSearch, { FieldType } from '@src/components/Search';
 import ProductTable from './components/productTable';
+import Operate from '@src/components/operate';
+import { Button } from 'antd';
 
 const fieldsConfig: FieldType[] = [
 	{
@@ -153,6 +155,19 @@ const ProductListPage = () => {
 	return (
 		<div>
 			<FieldsSearch data={fieldsConfig} onSearch={onSearch} />
+			<Operate
+				actionBtns={<Button>其他</Button>}
+				conditions={[
+					{
+						value: 1,
+						name: '商品上架',
+					},
+					{
+						value: 2,
+						name: '商品下架',
+					},
+				]}
+			/>
 			<ProductTable dataSource={dataSource} />
 		</div>
 	);

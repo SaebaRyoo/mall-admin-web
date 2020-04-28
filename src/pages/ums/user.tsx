@@ -2,6 +2,7 @@
 import * as React from 'react';
 import UserTable from './components/userTable';
 import FieldsSearch, { FieldType } from '@src/components/Search';
+import Operate from '@src/components/operate';
 
 const fieldsConfig: FieldType[] = [
 	{
@@ -19,6 +20,7 @@ const MenuPage = () => {
 	return (
 		<div>
 			<FieldsSearch data={fieldsConfig} onSearch={onSearch} />
+			<Operate />
 			<UserTable />
 		</div>
 	);

@@ -1,26 +1,24 @@
 import React from 'react';
-import { Table, Switch, Button } from 'antd';
+import { Table, Button, Switch } from 'antd';
 const dataSource = [
 	{
 		key: '1',
 		no: '1',
-		cateName: '服装',
-		level: '一级',
-		total: 100,
-		unit: '件',
-		nav: true,
+		icon: 'icon',
+		menuname: '商品',
+		name: 'pms',
+		level: 1,
 		visible: true,
 		sort: 1,
 	},
 	{
 		key: '2',
 		no: '2',
-		cateName: '手机数码',
-		level: '一级',
-		total: 100,
-		unit: '件',
-		nav: true,
-		visible: true,
+		icon: 'icon',
+		menuname: '订单',
+		name: 'oms',
+		level: 1,
+		visible: false,
 		sort: 1,
 	},
 ];
@@ -32,30 +30,24 @@ const columns = [
 		key: 'no',
 	},
 	{
-		title: '分类名称',
-		dataIndex: 'cateName',
-		key: 'cateName',
+		title: '菜单名称',
+		dataIndex: 'menuname',
+		key: 'menuname',
 	},
 	{
-		title: '级别',
-		dataIndex: 'level',
+		title: '菜单级数',
+		dataIndex: 'level、',
 		key: 'level',
 	},
 	{
-		title: '商品数量',
-		dataIndex: 'total',
-		key: 'total',
+		title: '前端名称',
+		dataIndex: 'name',
+		key: 'name',
 	},
 	{
-		title: '数量单位',
-		dataIndex: 'unit',
-		key: 'unit',
-	},
-	{
-		title: '导航栏',
-		dataIndex: 'nav',
-		key: 'nav',
-		render: (text: boolean | undefined) => <Switch checked={text} />,
+		title: '前端图标',
+		dataIndex: 'icon',
+		key: 'icon',
 	},
 	{
 		title: '是否显示',
@@ -75,7 +67,6 @@ const columns = [
 		render: () => (
 			<div className="g_action">
 				<Button>查看下级</Button>
-				<Button>转义商品</Button>
 			</div>
 		),
 	},
@@ -91,11 +82,14 @@ const columns = [
 		),
 	},
 ];
-const CateTable = () => {
+const MenuTable = () => {
+	const rowSelection = {
+		onChange: () => {},
+	};
 	return (
 		<div className="mt16">
 			<Table
-				rowSelection={{}}
+				rowSelection={rowSelection}
 				bordered
 				dataSource={dataSource}
 				columns={columns}
@@ -104,4 +98,4 @@ const CateTable = () => {
 	);
 };
 
-export default CateTable;
+export default MenuTable;

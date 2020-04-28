@@ -112,7 +112,13 @@ const ProductTable = ({ dataSource }: any) => {
 				onCancel={() => setSkuModal(false)}
 				onOk={() => setSkuModal(false)}
 			/>
-			<Table rowKey="id" columns={columns} dataSource={dataSource} bordered />
+			<Table
+				rowSelection={{}}
+				rowKey="id"
+				columns={columns}
+				dataSource={dataSource}
+				bordered
+			/>
 		</div>
 	);
 };

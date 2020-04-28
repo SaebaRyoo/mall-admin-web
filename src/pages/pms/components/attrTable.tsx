@@ -64,7 +64,12 @@ const columns = [
 const AttrTable = () => {
 	return (
 		<div>
-			<Table bordered dataSource={dataSource} columns={columns} />
+			<Table
+				rowSelection={{}}
+				bordered
+				dataSource={dataSource}
+				columns={columns}
+			/>
 		</div>
 	);
 };

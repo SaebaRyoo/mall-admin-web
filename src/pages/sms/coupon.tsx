@@ -2,6 +2,7 @@
 import * as React from 'react';
 import CouponTable from './components/couponTable';
 import FieldsSearch, { FieldType } from '@src/components/Search';
+import Operate from '@src/components/operate';
 
 const fieldsConfig: FieldType[] = [
 	{
@@ -49,6 +50,7 @@ const CouponPage = () => {
 	return (
 		<div>
 			<FieldsSearch data={fieldsConfig} onSearch={onSearch} />
+			<Operate />
 			<CouponTable />
 		</div>
 	);

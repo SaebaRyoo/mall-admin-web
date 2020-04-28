@@ -89,7 +89,12 @@ const columns = [
 const BrandTable = () => {
 	return (
 		<div className="mt16">
-			<Table bordered dataSource={dataSource} columns={columns} />
+			<Table
+				rowSelection={{}}
+				bordered
+				dataSource={dataSource}
+				columns={columns}
+			/>
 		</div>
 	);
 };
