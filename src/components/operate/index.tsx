@@ -11,7 +11,11 @@ type Condition = {
 };
 
 const OptionComp = ({ value, name }: Condition) => {
-	return <Option value={value}>{name}</Option>;
+	return (
+		<Option key={value} value={value}>
+			{name}
+		</Option>
+	);
 };
 
 const Operate = ({

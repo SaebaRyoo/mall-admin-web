@@ -5,7 +5,7 @@ const Home = asyncHOC(() => import('@src/pages/home'));
 const Login = asyncHOC(() => import('@src/pages/login'));
 // 商品页面
 const ProductPage = asyncHOC(() => import('@src/pages/pms/product'));
-const AddProductPage = asyncHOC(() => import('@src/pages/pms/addProduct'));
+const AddProductPage = asyncHOC(() => import('@src/pages/pms/productDetails'));
 const ProductCatePage = asyncHOC(() => import('@src/pages/pms/productCate'));
 const ProductAttrPage = asyncHOC(() => import('@src/pages/pms/productAttr'));
 const BrandManagePage = asyncHOC(() => import('@src/pages/pms/brand'));

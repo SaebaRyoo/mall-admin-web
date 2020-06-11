@@ -1,3 +1,4 @@
+import moment from 'moment';
 // 获取数据类型
 export const getType = (data: any) =>
 	Object.prototype.toString.call(data).replace(/\[\w+\s(\w+)\]/, '$1');
@@ -30,3 +31,7 @@ export function deepClone<T>(data: any): T {
 	}
 	return copy;
 }
+
+export const mConvert = (date: moment.MomentInput): any => {
+	return date === null || date === undefined ? null : moment(date);
+};

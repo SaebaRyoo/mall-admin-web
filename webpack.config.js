@@ -108,6 +108,7 @@ module.exports = smp.wrap({
         publicPath: '/'
     },
     optimization: {
+        runtimeChunk: true,
         minimizer: [
           // This is only used in production mode
           new TerserPlugin({
