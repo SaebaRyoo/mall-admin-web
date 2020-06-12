@@ -3,6 +3,8 @@ import { Steps, Button } from 'antd';
 import s from './productDetails.less';
 import StepOne from './components/steps/step1';
 import StepTwo from './components/steps/step2';
+import StepThree from './components/steps/step3';
+import StepFour from './components/steps/step4';
 
 const { Step } = Steps;
 
@@ -17,11 +19,11 @@ const steps = [
 	},
 	{
 		title: '填写商品属性',
-		content: '商品属性',
+		content: <StepThree styles={s} />,
 	},
 	{
 		title: '选择商品关联',
-		content: '商品关联',
+		content: <StepFour styles={s} />,
 	},
 ];
 
@@ -33,7 +35,6 @@ const AddProductPage = () => {
 	const prev = () => {
 		changeCurrent(current - 1);
 	};
-	console.log('productDetails----->');
 	return (
 		<div className={s.container}>
 			<Steps current={current}>

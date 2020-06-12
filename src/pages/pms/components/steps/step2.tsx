@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { mConvert } from '@src/utils/common';
+import OperateTable from '@src/components/Table/OperateTable';
 
 const TextArea = Input.TextArea;
 const { TabPane } = Tabs;
@@ -28,80 +29,126 @@ const TabsComp = ({
 	platinum,
 	diamond,
 	handleChange,
-}: any) => (
-	<Tabs
-		activeKey={preferentialWay}
-		onChange={(activeKey) => handleChange('preferentialWay', activeKey)}
-	>
-		<TabPane tab="无优惠" key="1">
-			无优惠
-		</TabPane>
-		<TabPane tab="特惠促销" key="2">
-			<Form.Item label="开始时间" {...tailLayout}>
-				<DatePicker
-					showTime
-					value={mConvert(startTime)}
-					onChange={(date, dateString: string) =>
-						handleChange('startTime', dateString)
-					}
-				/>
-			</Form.Item>
-			<Form.Item label="结束时间" {...tailLayout}>
-				<DatePicker
-					showTime
-					value={mConvert(endTime)}
-					onChange={(date, dateString: string) =>
-						handleChange('endTime', dateString)
-					}
-				/>
-			</Form.Item>
-			<Form.Item label="促销价格" {...tailLayout}>
-				<Input
-					type="number"
-					value={salesPrice}
-					onChange={(e) => {
-						handleChange('salesPrice', e.target.value);
+	stepPrice,
+	fullReduction,
+}: any) => {
+	return (
+		<Tabs
+			activeKey={preferentialWay}
+			onChange={(activeKey) => handleChange('preferentialWay', activeKey)}
+		>
+			<TabPane tab="无优惠" key="1">
+				无优惠
+			</TabPane>
+			<TabPane tab="特惠促销" key="2">
+				<Form.Item label="开始时间" {...tailLayout}>
+					<DatePicker
+						showTime
+						value={mConvert(startTime)}
+						onChange={(date, dateString: string) =>
+							handleChange('startTime', dateString)
+						}
+					/>
+				</Form.Item>
+				<Form.Item label="结束时间" {...tailLayout}>
+					<DatePicker
+						showTime
+						value={mConvert(endTime)}
+						onChange={(date, dateString: string) =>
+							handleChange('endTime', dateString)
+						}
+					/>
+				</Form.Item>
+				<Form.Item label="促销价格" {...tailLayout}>
+					<Input
+						type="number"
+						value={salesPrice}
+						onChange={(e) => {
+							handleChange('salesPrice', e.target.value);
+						}}
+					/>
+				</Form.Item>
+			</TabPane>
+			<TabPane tab="会员价格" key="3">
+				<Form.Item label="黄金会员" {...tailLayout}>
+					<Input
+						value={gold}
+						onChange={(e) => {
+							handleChange('gold', e.target.value);
+						}}
+					/>
+				</Form.Item>
+				<Form.Item label="白金会员" {...tailLayout}>
+					<Input
+						value={platinum}
+						onChange={(e) => {
+							handleChange('platinum', e.target.value);
+						}}
+					/>
+				</Form.Item>
+				<Form.Item label="钻石会员" {...tailLayout}>
+					<Input
+						value={diamond}
+						onChange={(e) => {
+							handleChange('diamond', e.target.value);
+						}}
+					/>
+				</Form.Item>
+			</TabPane>
+			<TabPane tab="阶梯价格" key="4">
+				<OperateTable
+					dataSource={stepPrice}
+					columns={[
+						{
+							title: '数量',
+							dataIndex: 'total',
+							key: 'total',
+						},
+						{
+							title: '折扣',
+							dataIndex: 'discount',
+							key: 'discount',
+						},
+					]}
+					onChange={(data) => {
+						handleChange('stepPrice', data);
+					}}
+					defaultData={{
+						total: 0,
+						discount: 0,
 					}}
 				/>
-			</Form.Item>
-		</TabPane>
-		<TabPane tab="会员价格" key="3">
-			<Form.Item label="黄金会员" {...tailLayout}>
-				<Input
-					value={gold}
-					onChange={(e) => {
-						handleChange('gold', e.target.value);
+			</TabPane>
+			<TabPane tab="满减价格" key="5">
+				<OperateTable
+					dataSource={fullReduction}
+					columns={[
+						{
+							title: '满',
+							dataIndex: 'full',
+							key: 'full',
+							needRender: true,
+						},
+						{
+							title: '立减',
+							dataIndex: 'decrease',
+							key: 'decrease',
+							needRender: true,
+						},
+					]}
+					onChange={(data) => {
+						handleChange('fullReduction', data);
+					}}
+					defaultData={{
+						full: 0,
+						decrease: 0,
 					}}
 				/>
-			</Form.Item>
-			<Form.Item label="白金会员" {...tailLayout}>
-				<Input
-					value={platinum}
-					onChange={(e) => {
-						handleChange('platinum', e.target.value);
-					}}
-				/>
-			</Form.Item>
-			<Form.Item label="钻石会员" {...tailLayout}>
-				<Input
-					value={diamond}
-					onChange={(e) => {
-						handleChange('diamond', e.target.value);
-					}}
-				/>
-			</Form.Item>
-		</TabPane>
-		<TabPane tab="阶梯价格" key="4">
-			Content of Tab Pane 4
-		</TabPane>
-		<TabPane tab="满减价格" key="5">
-			Content of Tab Pane 5
-		</TabPane>
-	</Tabs>
-);
-
+			</TabPane>
+		</Tabs>
+	);
+};
 const StepTwo = ({ styles }: any) => {
-	console.log('step2------------>');
 	const {
 		boundsPoint,
 		growthValue,
@@ -124,6 +171,8 @@ const StepTwo = ({ styles }: any) => {
 		gold, // 黄金会员价格
 		platinum, // 白金会员价格
 		diamond, // 钻石会员
+		stepPrice, // 阶梯价格
+		fullReduction, // 满减
 	} = useSelector((state: any) => state.pmsDetails);
 	const dispatch = useDispatch();
 	const handleChange = (key: string, value: any) => {
@@ -132,6 +181,35 @@ const StepTwo = ({ styles }: any) => {
 			payload: { [key]: value },
 		});
 	};
+
+	// 防止在改变其他与tab无关的props时，重新渲染Tabs组件
+	const MemoizedTab = React.useMemo(
+		() => (
+			<TabsComp
+				handleChange={handleChange}
+				preferentialWay={preferentialWay}
+				startTime={startTime}
+				endTime={endTime}
+				salesPrice={salesPrice}
+				gold={gold}
+				platinum={platinum}
+				diamond={diamond}
+				stepPrice={stepPrice}
+				fullReduction={fullReduction}
+			/>
+		),
+		[
+			preferentialWay,
+			startTime,
+			endTime,
+			salesPrice,
+			gold,
+			platinum,
+			diamond,
+			stepPrice,
+			fullReduction,
+		]
+	);
 	const data = [
 		{
 			label: '商品货号',
@@ -262,18 +340,7 @@ const StepTwo = ({ styles }: any) => {
 		},
 		{
 			label: '优惠方式',
-			child: (
-				<TabsComp
-					handleChange={handleChange}
-					preferentialWay={preferentialWay}
-					startTime={startTime}
-					endTime={endTime}
-					salesPrice={salesPrice}
-					gold={gold}
-					platinum={platinum}
-					diamond={diamond}
-				/>
-			),
+			child: MemoizedTab,
 		},
 	];
 	return (

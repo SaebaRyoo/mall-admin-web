@@ -6,7 +6,6 @@ const Option = Select.Option;
 const TextArea = Input.TextArea;
 
 const StepOne = ({ styles }: any) => {
-	console.log('step1------------>');
 	const {
 		productCate,
 		productName,
